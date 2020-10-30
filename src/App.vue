@@ -2,7 +2,9 @@
   <v-app>
     <Offline v-if="!getIsLogged && loaded"/>
     <Online v-if="getIsLogged && loaded"/>
-    <router-view/>
+    <div v-if="loaded">
+      <router-view/>
+    </div>
   </v-app>
 </template>
 
@@ -23,8 +25,15 @@ export default {
   },
   beforeCreate(){
     this.$store.dispatch('checkActive').then(res=>{
-      this.loaded = true
-    }).catch(err => {
+      if (res){
+        if (this.$route.fullPath !== "/home"){
+          this.$router.replace("/home")
+        }
+      }else{
+        if (this.$route.fullPath === "/home"){
+          this.$router.replace("/")
+        }
+      }
       this.loaded = true
     })
   },

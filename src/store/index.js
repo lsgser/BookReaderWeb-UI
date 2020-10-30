@@ -8,10 +8,13 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
   	books:[],
+  	bookLoader:false,
   	isLogged:false,
   	user:{},
   	isError:false,
+  	emptyQuery:true,
   	errMsg:"",
+  	readMode:false
   },
   mutations: {
   	SET_LOGIN(state,data){
@@ -23,15 +26,38 @@ export default new Vuex.Store({
   	},
   	SET_USER(state,data){
   		state.user = data.data
+  		state.user.picture = apiUrl.slice(0,-1)+data.data.picture
   	},
   	SET_BOOKS(state,data){
+  		state.books = []
+  		data.data.forEach((book,index)=>{
+  			book.cover_page = apiUrl.slice(0,-1)+book.cover_page
+  			book.book = apiUrl.slice(0,-1)+book.book
+  			state.books.push(book)
+  		})
 
+  		if (state.books.length === 0){
+  			state.emptyQuery = false
+  		}else{
+  			state.emptyQuery = true
+  		}
+  	},
+  	CLEAR_BOOKS(state){
+  		state.books = []
   	},
   	SET_LOGOUT(state){
   		if(localStorage.getItem("token")){
   			localStorage.removeItem("token")	
   		}
+
   		state.isLogged = false
+  		state.books=[]
+	  	state.bookLoader=false
+	  	state.user={}
+	  	state.isError=false
+	  	state.emptyQuery=true
+	  	state.errMsg=""
+	  	state.readMode=false
   	},
   	SET_ACTIVE(state){
   		state.isLogged = true
@@ -47,6 +73,21 @@ export default new Vuex.Store({
   	},
   	SET_CLEAR_ERROR_MSG(state){
   		state.errMsg = ""
+  	},
+  	SET_BOOK_LOADER(state){
+  		state.bookLoader = true
+  	},
+  	CLEAR_BOOK_LOADER(state){
+  		state.bookLoader = false
+  	},
+  	SET_EMPTY_QUERY(state){
+  		state.emptyQuery = true
+  	},
+  	SET_READ_MODE(state){
+  		state.readMode = true
+  	},
+  	DISABLE_READ_MODE(state){
+  		state.readMode = false
   	}
   },
   getters: {
@@ -57,6 +98,9 @@ export default new Vuex.Store({
   	getUser:state => {return state.user},
   	getErrorMsg:state => {return state.errMsg},
   	getIsError:state => {return state.isError},
+  	getBookLoader:state => {return state.bookLoader},
+  	getEmptyQuery:state => {return state.emptyQuery},
+  	getReadMode:state=>{return state.readMode}
   },
   actions: {
   	async login({commit},data){
@@ -69,11 +113,9 @@ export default new Vuex.Store({
   				user:data.user,
   				password:data.password
   			})
-  			console.log(resp.data)
   			commit('SET_LOGIN',resp)
   			return resp
   		}catch(err){
-  			console.error(err)
   			if(err.response.data.status){
   				commit('SET_ERROR_MSG',err.response.data.status)	
   			}else{
@@ -102,7 +144,23 @@ export default new Vuex.Store({
   		}
   	},
   	async loadBooks({commit},data){
-  		
+  		commit('CLEAR_BOOKS')
+  		try{
+  			const res = await axios.get(apiUrl+"book_q/"+data.q)
+  			commit('SET_BOOKS',res)
+  			return res
+  		}catch(err){
+  			console.error(err)
+  		}
+  	},
+  	async logout({commit}){
+  		try{
+  			const res = await axios.delete(apiUrl+"user_logout/"+localStorage.getItem("token"))
+  			commit('SET_LOGOUT')
+  			return res
+  		}catch(err){
+  			console.log(err)
+  		}
   	}
   },
   modules: {

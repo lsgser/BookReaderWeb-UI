@@ -85,13 +85,14 @@
 		        if(this.user && this.password){
 		          this.loader = true
 		          this.$store.dispatch('login',JSON.stringify({user:self.user.trim(),password:self.password})).then(res => {
-		          	self.name = ""
-		          	self.password = ""
-		            self.loader=false
-		            console.log(res)
+		          	if(res){//Success
+		          		self.name = ""
+			          	self.password = ""
+			            this.$router.replace("/home")	
+		          	}
+		          	self.loader=false
 		          }).catch(err => {
 		            self.loader = false;
-		            console.log(err)
 		          })
 		        }else{
 		        	this.$store.commit('SET_ERROR_MSG','Fill in all fields')

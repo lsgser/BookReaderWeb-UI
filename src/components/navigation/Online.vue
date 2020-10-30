@@ -7,7 +7,24 @@
   	>
   	  <v-toolbar-title>BookReader</v-toolbar-title>
   	  <v-spacer></v-spacer>
-  	  <v-btn color="primary">Logout</v-btn>
+  	  <v-btn color="primary" @click="logout">Logout</v-btn>
   	</v-toolbar>
   </div>
 </template>
+
+<script>
+  export default{
+    name:'Logout',
+    methods:{
+      logout(){
+        this.$store.dispatch('logout').then(res=>{
+          if(res){
+            this.$router.replace("/")  
+          }
+        }).catch(err=>{
+          console.error(err)
+        })
+      }
+    }
+  }
+</script>

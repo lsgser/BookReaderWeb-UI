@@ -1,15 +1,26 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store';
 import Home from '../views/Home.vue'
 import Main from '../views/Main.vue'
 
 Vue.use(VueRouter)
 
-  const routes = [
+const offlineAuth = (to,from,next) => {
+  if(store.getters.getIsLogged)
+  {
+    next(`/home`)
+  }
+  else{
+    next()
+  }
+}
+
+const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home 
   },
   {
     path: '/home',
