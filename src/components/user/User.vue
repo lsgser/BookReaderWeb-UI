@@ -28,7 +28,9 @@
 		},
 		beforeMount(){
 			this.$store.dispatch('loadUser').then(res =>{
-				this.loaded = true
+				this.$store.dispatch('recommended',{u:this.getUser.student}).then(res=>{
+					this.loaded = true
+				})
 			})
 		},
 		data:()=>({

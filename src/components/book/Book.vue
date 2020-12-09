@@ -3,9 +3,10 @@
 	  	<v-alert dark color="primary" v-show="getBooks.length === 0 && !getBookLoader && !getEmptyQuery && !getReadMode">
 	  		Book not found
 	  	</v-alert>
+	  	<!--
       	<v-layout row wrap v-show="!getReadMode">
 	        <v-flex xs12 sm6 md4 lg3 v-for="book in getBooks" :key="book.isbn">
-	          	<v-card tile max-width="90%">
+	          	<v-card tile max-width="60%">
 				    <img
 		          	  :src="book.cover_page"
 				      height="100%"
@@ -29,22 +30,79 @@
 				    </v-card-subtitle>
 
 				    
-				      <v-btn
-				        color="success"
-				        @click="readBook(book.book)"
-				        width="100%"
-				        tile
-				      >
-				        Read
-				      </v-btn>
+				    <v-btn
+				       color="success"
+				       @click="readBook(book.book)"
+				       width="100%"
+				       tile
+				    >
+				       Read
+				     </v-btn>
 				   
 	          	</v-card>
 	        </v-flex>
       	</v-layout>
+		-->
+		<v-list three-line v-if="!getIsTyped && !getReadMode">
+		 	<div v-if="getRecommended.length">
+				<h3 class="font-weight-light mb-3">Recommended books by modules</h3>
+			</div>
+		    <div v-for="(recommend, index) in getRecommended" :key="recommend.isbn+index">
+		      	<v-divider
+		        ></v-divider>
+		        <v-subheader
+		          v-text="recommend.module"
+		        ></v-subheader>
+		        <v-list-item
+		        	@click="readBook(recommend.book)"
+		        >
+			        <v-list-item-avatar
+			        	tile
+		        		size="70"
+			        >
+			          <v-img :src="recommend.cover_page"></v-img>
+			        </v-list-item-avatar>
 
+			        <v-list-item-content>
+			            <v-list-item-title>{{recommend.title}}</v-list-item-title>
+			            <v-list-item-subtitle>{{recommend.author}}</v-list-item-subtitle>
+			            <v-list-item-subtitle>ISBN: {{recommend.isbn}}</v-list-item-subtitle>
+				        <v-list-item-subtitle>{{recommend.publish_date}}</v-list-item-subtitle>
+			        </v-list-item-content>
+		        </v-list-item>
+		        <v-divider
+		        ></v-divider>
+		    </div>
+	    </v-list>
+		<v-list three-line v-if="!getReadMode">
+		    <div v-for="book in getBooks" :key="book.isbn">
+		    	<v-divider
+		        ></v-divider>
+			        <v-list-item
+			          v-if="book.cover_page"
+			          @click="readBook(book.book)"
+			        >
+				        <v-list-item-avatar
+				        	tile
+			        		size="70"
+				        >
+				          <v-img :src="book.cover_page"></v-img>
+				        </v-list-item-avatar>
+
+				        <v-list-item-content>
+				            <v-list-item-title >{{book.title}}</v-list-item-title>
+				            <v-list-item-subtitle >{{book.author}}</v-list-item-subtitle>
+				            <v-list-item-subtitle >ISBN: {{book.isbn}}</v-list-item-subtitle>
+				            <v-list-item-subtitle >{{book.publish_date}}</v-list-item-subtitle>
+				        </v-list-item-content>
+			        </v-list-item>
+		        <v-divider
+		        ></v-divider>
+		    </div>
+	    </v-list>
       	<div style="width: 55%" v-if="getReadMode" class="mx-auto">
       			<center class="mb-3">
-      				<v-btn color="primary" @click="readModeOff" dark>Read another book</v-btn>
+      				<v-btn color="primary" @click="readModeOff" dark>Search for another book</v-btn>
       				<h5>Total pages {{numPages}}</h5>
       				<v-text-field  
       				 v-model.number="page" label="Enter page number" @change="selectPage($event)">
@@ -87,6 +145,15 @@
 			},
 			getReadMode(){
 				return this.$store.getters.getReadMode
+			},
+			getUser(){
+				return this.$store.getters.getUser
+			},
+			getRecommended(){
+				return this.$store.getters.getRecommended
+			},
+			getIsTyped(){
+				return this.$store.getters.getIsTyped
 			}
 		},
 		methods:{

@@ -31,7 +31,12 @@ export default{
     methods:{
         searchBook(e){
             let self = this
-
+            /*
+                For recommended books,if the query is empty 
+                display the recommended list
+            */
+            this.$store.commit('IS_TYPED',{q:this.query.trim()})
+            
             if(this.query.trim())
             {
                 if(!(e.keyCode > 36 && e.keyCode < 41))

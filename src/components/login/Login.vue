@@ -5,7 +5,7 @@
 	>
 		<v-app-bar
 	      dark
-	      color="success"
+	      color="black"
 	    >
 	      <v-toolbar-title>Login</v-toolbar-title>
 
@@ -53,7 +53,7 @@
 		    </v-row>  
 	    </v-container>
 	    <v-btn
-            color="success"
+            color="black"
           	large
           	tile
           	dark

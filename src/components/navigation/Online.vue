@@ -5,9 +5,9 @@
   		class="mb-5"
   		dark 
   	>
-  	  <v-toolbar-title>BookReader</v-toolbar-title>
+  	  <v-toolbar-title>Pride Books</v-toolbar-title>
   	  <v-spacer></v-spacer>
-  	  <v-btn color="primary" @click="logout">Logout</v-btn>
+  	  <v-btn color="black" @click="logout">Logout</v-btn>
   	</v-toolbar>
   </div>
 </template>

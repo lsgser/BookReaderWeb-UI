@@ -1,13 +1,13 @@
 <template>
 	<div>
 	<v-toolbar 
-  		color="primary" 
+  		color="success" 
   		class="mb-5"
   		dark 
   	>
-  	  <v-toolbar-title>BookReader</v-toolbar-title>
+  	  <v-toolbar-title>Pride Books</v-toolbar-title>
   	  <v-spacer></v-spacer>
-  	  <v-btn color="success">About</v-btn>
+  	  <v-btn color="black">About</v-btn>
   	</v-toolbar>
   </div>
 </template>

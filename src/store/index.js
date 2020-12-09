@@ -14,7 +14,10 @@ export default new Vuex.Store({
   	isError:false,
   	emptyQuery:true,
   	errMsg:"",
-  	readMode:false
+  	readMode:false,
+    recommended:[],
+    autoCompleteWords:[],
+    isTyped:false
   },
   mutations: {
   	SET_LOGIN(state,data){
@@ -29,10 +32,12 @@ export default new Vuex.Store({
   		state.user.picture = apiUrl.slice(0,-1)+data.data.picture
   	},
   	SET_BOOKS(state,data){
+      state.autoCompleteWords = []
   		state.books = []
   		data.data.forEach((book,index)=>{
   			book.cover_page = apiUrl.slice(0,-1)+book.cover_page
   			book.book = apiUrl.slice(0,-1)+book.book
+        state.autoCompleteWords.push(book.title)
   			state.books.push(book)
   		})
 
@@ -43,6 +48,7 @@ export default new Vuex.Store({
   		}
   	},
   	CLEAR_BOOKS(state){
+      state.autoCompleteWords = []
   		state.books = []
   	},
   	SET_LOGOUT(state){
@@ -52,6 +58,7 @@ export default new Vuex.Store({
 
   		state.isLogged = false
   		state.books=[]
+      state.autoCompleteWords=[]
 	  	state.bookLoader=false
 	  	state.user={}
 	  	state.isError=false
@@ -88,7 +95,22 @@ export default new Vuex.Store({
   	},
   	DISABLE_READ_MODE(state){
   		state.readMode = false
-  	}
+  	},
+    SET_RECOMMENDED(state,data){
+      state.recommended = []
+      data.data.forEach(recommend => {
+        recommend.cover_page = apiUrl.slice(0,-1)+recommend.cover_page
+        recommend.book = apiUrl.slice(0,-1)+recommend.book
+        state.recommended.push(recommend)
+      })
+    },
+    IS_TYPED(state,data){
+      if(data.q){
+        state.isTyped = true
+      }else{
+        state.isTyped = false
+      }
+    }
   },
   getters: {
   	getIsLogged:state => { return state.isLogged },
@@ -100,7 +122,10 @@ export default new Vuex.Store({
   	getIsError:state => {return state.isError},
   	getBookLoader:state => {return state.bookLoader},
   	getEmptyQuery:state => {return state.emptyQuery},
-  	getReadMode:state=>{return state.readMode}
+  	getReadMode:state=>{return state.readMode},
+    getRecommended:state=>{return state.recommended},
+    getAutoCompleteWords:state=>{return state.autoCompleteWords},
+    getIsTyped:state => {return state.isTyped}
   },
   actions: {
   	async login({commit},data){
@@ -161,7 +186,15 @@ export default new Vuex.Store({
   		}catch(err){
   			console.log(err)
   		}
-  	}
+  	},
+    async recommended({commit},data){
+      try{
+        const res = await axios.get(apiUrl+"recommended_by_user/"+data.u)
+        commit('SET_RECOMMENDED',res)
+      }catch(err){
+        console.log(err)
+      }
+    }
   },
   modules: {
   }
