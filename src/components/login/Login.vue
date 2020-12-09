@@ -2,10 +2,11 @@
 	<v-card
 		max-width="400"
 		class="mx-auto"	
+		color="#A9A9A9"
 	>
 		<v-app-bar
 	      dark
-	      color="black"
+	      color="red"
 	    >
 	      <v-toolbar-title>Login</v-toolbar-title>
 

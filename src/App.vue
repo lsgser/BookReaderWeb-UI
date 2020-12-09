@@ -8,6 +8,11 @@
   </v-app>
 </template>
 
+<style>
+  #app{
+    background-color: #D3D3D3;
+  }
+</style>
 <script>
 import Offline from './components/navigation/Offline.vue';
 import Online from './components/navigation/Online.vue';

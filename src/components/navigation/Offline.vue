@@ -1,7 +1,7 @@
 <template>
 	<div>
 	<v-toolbar 
-  		color="success" 
+  		color="red" 
   		class="mb-5"
   		dark 
   	>

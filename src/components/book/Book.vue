@@ -1,5 +1,5 @@
 <template>
-	<v-container grid-list-md text-xs-center>
+	<v-container grid-list-md text-xs-center  color="#A3A3A3">
 	  	<v-alert dark color="primary" v-show="getBooks.length === 0 && !getBookLoader && !getEmptyQuery && !getReadMode">
 	  		Book not found
 	  	</v-alert>
@@ -43,7 +43,7 @@
 	        </v-flex>
       	</v-layout>
 		-->
-		<v-list three-line v-if="!getIsTyped && !getReadMode">
+		<v-list three-line v-if="!getIsTyped && !getReadMode"  color="#D3D3D3">
 		 	<div v-if="getRecommended.length">
 				<h3 class="font-weight-light mb-3">Recommended books by modules</h3>
 			</div>
@@ -74,7 +74,7 @@
 		        ></v-divider>
 		    </div>
 	    </v-list>
-		<v-list three-line v-if="!getReadMode">
+		<v-list three-line v-if="!getReadMode"  color="#D3D3D3">
 		    <div v-for="book in getBooks" :key="book.isbn">
 		    	<v-divider
 		        ></v-divider>
@@ -102,24 +102,63 @@
 	    </v-list>
       	<div style="width: 55%" v-if="getReadMode" class="mx-auto">
       			<center class="mb-3">
-      				<v-btn color="primary" @click="readModeOff" dark>Search for another book</v-btn>
-      				<h5>Total pages {{numPages}}</h5>
-      				<v-text-field  
-      				 v-model.number="page" label="Enter page number" @change="selectPage($event)">
-      				</v-text-field>
-      				<v-btn @click="rotate -= 90" color="success" class="mr-2 mb-3">&#x27F2;</v-btn>
-					<v-btn @click="rotate += 90" color="success" class="mb-3">&#x27F3;</v-btn>
+      				<v-btn color="black mb-3" @click="readModeOff" dark>Go to search</v-btn>
+      				<h5 class="mb-3">Pages</h5>
+      				<v-row style="width:30%;" class="hidden-xs-only hidden-sm-only">
+	      				<v-text-field 
+	      				 solo
+	      				 dense
+	      				 mt-3
+	      				 style="width:5%;height: 10%;" 
+	      				 v-model.number="page" label="page" @change="selectPage($event)"
+	      				>
+	      				</v-text-field>
+	      				<h2 class="ml-2 mr-2">/</h2>
+	      				<v-text-field 
+	      				 mt-3
+	      				 outlined
+	      				 dense
+	      				 color="#A3A3A3"
+	      				 style="width:5%;height: 10%;" 
+	      				 v-model.number="numPages"
+	      				 disabled
+	      				>
+	      				</v-text-field>
+      				</v-row>
+      				<v-row style="width:80%;" class="hidden-md-only hidden-lg-only hidden-xl-only">
+	      				<v-text-field 
+	      				 solo
+	      				 dense
+	      				 mt-3
+	      				 style="width:5%;height: 10%;" 
+	      				 v-model.number="page" label="page" @change="selectPage($event)"
+	      				>
+	      				</v-text-field>
+	      				<h2 class="ml-2 mr-2">/</h2>
+	      				<v-text-field 
+	      				 mt-3
+	      				 outlined
+	      				 dense
+	      				 color="#A3A3A3"
+	      				 style="width:5%;height: 10%;" 
+	      				 v-model.number="numPages"
+	      				 disabled
+	      				>
+	      				</v-text-field>
+      				</v-row>
+      				<v-btn @click="rotate -= 90" color="black" class="mr-2 mb-3" dark>&#x27F2;</v-btn>
+					<v-btn @click="rotate += 90" color="black" class="mb-3" dark>&#x27F3;</v-btn>
 					<!--
 					<br>
 						<v-btn @click="$refs.pdf.print()" class="success mb-3"><v-icon>mdi-printer</v-icon></v-btn>
 					-->
       			</center>
 				<div v-if="loadedRatio > 0 && loadedRatio < 1" style="background-color: green; color: white; text-align: center" :style="{ width: loadedRatio * 100 + '%' }">{{ Math.floor(loadedRatio * 100) }}%</div>
-				<pdf v-if="getReadMode" ref="pdf" style="border: 1px solid red" :src="src" :page="page" :rotate="rotate" @progress="loadedRatio = $event" @error="error" @num-pages="numPages = $event" @link-clicked="page = $event"></pdf>
+				<pdf v-if="getReadMode" ref="pdf" :src="src" :page="page" :rotate="rotate" @progress="loadedRatio = $event" @error="error" @num-pages="numPages = $event" @link-clicked="page = $event"></pdf>
 				<center>
 					<br>
-					<v-btn class="primary mr-2 mb-3" @click="previousPage"><v-icon>mdi-arrow-left-bold</v-icon></v-btn>
-					<v-btn class="primary mb-3" @click="nextPage"><v-icon>mdi-arrow-right-bold</v-icon></v-btn>
+					<v-btn class="black mr-2 mb-3" @click="previousPage" dark><v-icon>mdi-arrow-left-bold</v-icon></v-btn>
+					<v-btn class="black mb-3" @click="nextPage" dark><v-icon>mdi-arrow-right-bold</v-icon></v-btn>
 				</center>
 		</div>
     </v-container>
